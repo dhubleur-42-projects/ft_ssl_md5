@@ -1,7 +1,13 @@
 NAME		=	ft_ssl
 
 SRCS		= 	\
-				main.c
+				main.c \
+				$(addprefix algorithms/, \
+					$(addprefix md5/, \
+						md5_intern.c \
+						md5_extern.c \
+					) \
+				)
 
 _OBJS		=	${SRCS:.c=.o}
 OBJS		=	$(addprefix build/, $(_OBJS))
