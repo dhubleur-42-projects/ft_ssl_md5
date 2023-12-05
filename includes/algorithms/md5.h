@@ -6,7 +6,7 @@
 /*   By: dhubleur <dhubleur@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/05 14:36:18 by dhubleur          #+#    #+#             */
-/*   Updated: 2023/12/05 15:16:14 by dhubleur         ###   ########.fr       */
+/*   Updated: 2023/12/05 15:20:06 by dhubleur         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,9 +15,10 @@
 
 # include "libft.h"
 # include <stdint.h>
+# include <stdbool.h>
 
 // Extern
-void md5_file(int fd, uint8_t *result);
+bool md5_file(int fd, uint8_t *result);
 void md5_string(char *string, uint8_t *result);
 
 
