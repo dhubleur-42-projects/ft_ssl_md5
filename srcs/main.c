@@ -6,7 +6,7 @@
 /*   By: dhubleur <dhubleur@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/05 14:33:28 by dhubleur          #+#    #+#             */
-/*   Updated: 2023/12/06 18:01:08 by dhubleur         ###   ########.fr       */
+/*   Updated: 2023/12/06 18:11:02 by dhubleur         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,7 +59,7 @@ int	main(int argc, char **argv)
 	if (parser.arguments_count == 0 || parser.printing)
 	{
 		char *stdin_content = read_stdin();
-		if (!stdin)
+		if (!stdin_content)
 		{
 			ft_putstr_fd("A malloc failed\n", 2);
 			free_parser(&parser);
