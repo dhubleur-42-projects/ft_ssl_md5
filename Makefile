@@ -2,6 +2,7 @@ NAME		=	ft_ssl
 
 SRCS		= 	\
 				main.c \
+				parser.c \
 				$(addprefix algorithms/, \
 					$(addprefix md5/, \
 						md5_intern.c \
