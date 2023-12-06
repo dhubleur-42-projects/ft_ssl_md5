@@ -6,7 +6,7 @@
 /*   By: dhubleur <dhubleur@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/05 14:33:28 by dhubleur          #+#    #+#             */
-/*   Updated: 2023/12/06 18:11:02 by dhubleur         ###   ########.fr       */
+/*   Updated: 2023/12/06 23:39:47 by dhubleur         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,15 +28,50 @@ void print_help()
 	ft_putstr_fd("\t-s\tPrint the sum of the given string\n", 1);
 }
 
+#define STDIN_BUFFER_SIZE 2
+
 char *read_stdin()
 {
-	//leak
-	char *buffer = get_next_line(0);
+	char *buffer = malloc(sizeof(char) * (STDIN_BUFFER_SIZE + 1));
 	if (!buffer)
+		return (NULL);
+	ft_bzero(buffer, STDIN_BUFFER_SIZE + 1);
+	int readed = 0;
+	int buffer_size = STDIN_BUFFER_SIZE;
+	int buffer_used = 0;
+	char reading_buffer[STDIN_BUFFER_SIZE + 1];
+	while (ft_strchr(buffer, '\n') == NULL && (readed = read(0, reading_buffer, STDIN_BUFFER_SIZE)) > 0)
 	{
-		ft_putstr_fd("A malloc failed\n", 2);
+		reading_buffer[readed] = '\0';
+		if (buffer_used + readed >= buffer_size)
+		{
+			buffer_size *= 2;
+			char *new_buffer = malloc(sizeof(char) * (buffer_size + 1));
+			if (!new_buffer)
+			{
+				free(buffer);
+				return (NULL);
+			}
+			ft_bzero(new_buffer, buffer_size + 1);
+			ft_strcpy(new_buffer, buffer);
+			free(buffer);
+			buffer = new_buffer;
+		}
+		buffer_used += readed;
+		ft_strcat(buffer, reading_buffer);
+	}
+
+	if (readed == -1)
+	{
+		free(buffer);
 		return (NULL);
 	}
+
+	if (ft_strchr(buffer, '\n') != NULL)
+	{
+		*ft_strchr(buffer, '\n') = '\0';
+	}
+
 	return (buffer);
 }
 
