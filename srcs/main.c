@@ -6,19 +6,12 @@
 /*   By: dhubleur <dhubleur@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/05 14:33:28 by dhubleur          #+#    #+#             */
-/*   Updated: 2023/12/06 16:23:44 by dhubleur         ###   ########.fr       */
+/*   Updated: 2023/12/06 17:10:13 by dhubleur         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "algorithms/md5.h"
+#include "runner.h"
 #include "parser.h"
-
-// void print(uint8_t *hash){
-//     for(unsigned int i = 0; i < 16; ++i){
-//         printf("%02x", hash[i]);
-//     }
-//     printf("\n");
-// }
 
 void print_help()
 {
@@ -51,7 +44,25 @@ int	main(int argc, char **argv)
 		return (0);
 	}
 
-
+	bool read_stdin = parser.arguments_count == 0 || parser.printing;
+	char *buffer;
+	for (int i = read_stdin ? -1 : 0; i < parser.arguments_count; i++)
+	{
+		t_argument argument;
+		if (i == -1)
+		{
+			argument.type = FILE_NAME;
+			argument.name = NULL;
+		}
+		else
+			argument = parser.arguments[i];
+		if (!run(parser, argument, &buffer))
+		{
+			free_parser(&parser);
+			return (1);
+		}
+		printf("%s\n", buffer);
+	}
 
 	free_parser(&parser);
 	return (0);

@@ -4,6 +4,7 @@ SRCS		= 	\
 				main.c \
 				parser.c \
 				$(addprefix algorithms/, \
+					runner.c \
 					$(addprefix md5/, \
 						md5_intern.c \
 						md5_extern.c \

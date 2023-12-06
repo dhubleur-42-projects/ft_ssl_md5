@@ -1,42 +1,27 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   parser.h                                           :+:      :+:    :+:   */
+/*   runner.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: dhubleur <dhubleur@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/12/05 17:19:09 by dhubleur          #+#    #+#             */
-/*   Updated: 2023/12/06 16:51:18 by dhubleur         ###   ########.fr       */
+/*   Created: 2023/12/06 16:34:57 by dhubleur          #+#    #+#             */
+/*   Updated: 2023/12/06 16:54:07 by dhubleur         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef PARSER_H
-# define PARSER_H
+#ifndef RUNNER_H
+# define RUNNER_H
+
+# include <fcntl.h>
+# include <unistd.h>
+# include <stdbool.h>
+# include <stdio.h>
 
 # include "libft.h"
-# include <stdbool.h>
+# include "parser.h"
+# include "algorithms/md5.h"
 
-typedef enum {
-	FILE_NAME,
-	STRING,
-}	ARG_TYPE;
-
-typedef struct {
-	char *name;
-	ARG_TYPE type;
-}	t_argument;
-
-typedef struct {
-	bool help;
-	bool printing;
-	bool quiet;
-	bool reverse;
-	char *command;
-	int arguments_count;
-	t_argument *arguments;
-}	t_parser;
-
-bool	parse(t_parser *parser, int argc, char **argv);
-void 	free_parser(t_parser *parser);
+bool run(t_parser parser, t_argument argument, char *res[2]);
 
 #endif

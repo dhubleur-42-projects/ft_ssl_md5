@@ -6,7 +6,7 @@
 /*   By: dhubleur <dhubleur@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/05 17:19:31 by dhubleur          #+#    #+#             */
-/*   Updated: 2023/12/06 16:25:38 by dhubleur         ###   ########.fr       */
+/*   Updated: 2023/12/06 16:51:22 by dhubleur         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,7 +95,7 @@ bool	parse(t_parser *parser, int argc, char **argv)
 				parser->command = argv[i];
 			else
 			{
-				parser->arguments[arg_index++] = (t_argument){argv[i], is_next_arg_a_string ? STRING : FILE};
+				parser->arguments[arg_index++] = (t_argument){argv[i], is_next_arg_a_string ? STRING : FILE_NAME};
 				is_next_arg_a_string = false;
 			}
 		}
