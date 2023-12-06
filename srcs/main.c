@@ -6,7 +6,7 @@
 /*   By: dhubleur <dhubleur@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/05 14:33:28 by dhubleur          #+#    #+#             */
-/*   Updated: 2023/12/06 17:11:41 by dhubleur         ###   ########.fr       */
+/*   Updated: 2023/12/06 17:49:59 by dhubleur         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,19 @@ void print_help()
 	ft_putstr_fd("\t-s\tPrint the sum of the given string\n", 1);
 }
 
+char *read_stdin()
+{
+	char *buffer = get_next_line(0);
+	if (!buffer)
+	{
+		ft_putstr_fd("A malloc failed\n", 2);
+		return (NULL);
+	}
+	if (buffer[ft_strlen(buffer) - 1] == '\n')
+		buffer[ft_strlen(buffer) - 1] = '\0';
+	return (buffer);
+}
+
 int	main(int argc, char **argv)
 {
 	t_parser parser;
@@ -44,24 +57,36 @@ int	main(int argc, char **argv)
 		return (0);
 	}
 
-	bool read_stdin = parser.arguments_count == 0 || parser.printing;
-	char *buffer;
-	for (int i = read_stdin ? -1 : 0; i < parser.arguments_count; i++)
+	if (parser.arguments_count == 0 || parser.printing)
 	{
-		t_argument argument;
-		if (i == -1)
+		char *stdin = read_stdin();
+		if (!stdin)
 		{
-			argument.type = FILE_NAME;
-			argument.name = NULL;
+			ft_putstr_fd("A malloc failed\n", 2);
+			free_parser(&parser);
+			return (1);
 		}
-		else
-			argument = parser.arguments[i];
+		t_argument argument = { .type = STRING, .name = stdin };
+		char *buffer;
 		if (!run(parser, argument, &buffer))
+		{
+			free(stdin);
+			free_parser(&parser);
+			return (1);
+		}
+		print(parser, argument, true, buffer);
+		free(buffer);
+		free(stdin);
+	}
+	for (int i = 0; i < parser.arguments_count; i++)
+	{
+		char *buffer;
+		if (!run(parser, parser.arguments[i], &buffer))
 		{
 			free_parser(&parser);
 			return (1);
 		}
-		printf("%s\n", buffer);
+		print(parser, parser.arguments[i], false, buffer);
 		free(buffer);
 	}
 

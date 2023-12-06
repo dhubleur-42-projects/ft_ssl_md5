@@ -6,7 +6,7 @@
 /*   By: dhubleur <dhubleur@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/06 16:34:50 by dhubleur          #+#    #+#             */
-/*   Updated: 2023/12/06 17:30:26 by dhubleur         ###   ########.fr       */
+/*   Updated: 2023/12/06 17:31:28 by dhubleur         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,9 +56,7 @@ bool run(t_parser parser, t_argument argument, char **res)
 		runner.string_runner(argument.name, hash);
 	else
 	{
-		int fd = 0;
-		if (argument.name != NULL)
-			fd = open(argument.name, O_RDONLY);
+		int fd = open(argument.name, O_RDONLY);
 		if (fd == -1)
 		{
 			ft_putstr_fd("ft_ssl: ", 2);

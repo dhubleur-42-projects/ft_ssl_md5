@@ -6,7 +6,7 @@
 /*   By: dhubleur <dhubleur@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/06 16:34:57 by dhubleur          #+#    #+#             */
-/*   Updated: 2023/12/06 17:30:00 by dhubleur         ###   ########.fr       */
+/*   Updated: 2023/12/06 17:46:11 by dhubleur         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,5 +33,6 @@ typedef struct {
 } t_runner;
 
 bool run(t_parser parser, t_argument argument, char *res[2]);
+void print(t_parser parser, t_argument argument, bool is_stdin, char *hash);
 
 #endif
