@@ -3,6 +3,8 @@
 		"md5.h": "c",
 		"stdint.h": "c",
 		"ranges": "c",
-		"runner.h": "c"
+		"runner.h": "c",
+		"sha256.h": "c",
+		"libft.h": "c"
 	}
 }

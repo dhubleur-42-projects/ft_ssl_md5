@@ -6,15 +6,16 @@
 /*   By: dhubleur <dhubleur@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/06 16:34:50 by dhubleur          #+#    #+#             */
-/*   Updated: 2023/12/06 17:31:28 by dhubleur         ###   ########.fr       */
+/*   Updated: 2023/12/06 22:17:26 by dhubleur         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "runner.h"
 
-#define RUNNERS_COUNT 1
+#define RUNNERS_COUNT 2
 const static t_runner runners[RUNNERS_COUNT] = {
 	(t_runner){ "md5", md5_string, md5_file, 16 },
+	(t_runner){ "sha256", sha256_string, sha256_file, 32 },
 };
 
 bool convert_hash_to_string(uint8_t *hash, int hash_length, char **buffer)

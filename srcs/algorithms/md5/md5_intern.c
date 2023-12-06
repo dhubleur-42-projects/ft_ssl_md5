@@ -6,7 +6,7 @@
 /*   By: dhubleur <dhubleur@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/05 14:37:18 by dhubleur          #+#    #+#             */
-/*   Updated: 2023/12/05 15:16:30 by dhubleur         ###   ########.fr       */
+/*   Updated: 2023/12/06 22:06:12 by dhubleur         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,7 +59,7 @@ static uint8_t PADDING_CONTAINER[] = {0x80, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 
 #define I(X, Y, Z) (Y ^ (X | ~Z))
 
 // Utility function to apply bitwise rotation left
-uint32_t rotateLeft(uint32_t x, uint32_t n){
+static uint32_t rotateLeft(uint32_t x, uint32_t n){
     return (x << n) | (x >> (32 - n));
 }
 

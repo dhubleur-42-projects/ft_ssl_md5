@@ -10,6 +10,10 @@ SRCS		= 	\
 						md5_intern.c \
 						md5_extern.c \
 					) \
+					$(addprefix sha256/, \
+						sha256_intern.c \
+						sha256_extern.c \
+					) \
 				)
 
 _OBJS		=	${SRCS:.c=.o}
