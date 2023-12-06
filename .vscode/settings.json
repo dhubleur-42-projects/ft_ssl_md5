@@ -5,6 +5,10 @@
 		"ranges": "c",
 		"runner.h": "c",
 		"sha256.h": "c",
-		"libft.h": "c"
+		"libft.h": "c",
+		"array": "c",
+		"string": "c",
+		"string_view": "c",
+		"vector": "c"
 	}
 }
