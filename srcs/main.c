@@ -6,7 +6,7 @@
 /*   By: dhubleur <dhubleur@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/05 14:33:28 by dhubleur          #+#    #+#             */
-/*   Updated: 2023/12/06 17:49:59 by dhubleur         ###   ########.fr       */
+/*   Updated: 2023/12/06 17:58:43 by dhubleur         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,7 @@ void print_help()
 
 char *read_stdin()
 {
+	//leak
 	char *buffer = get_next_line(0);
 	if (!buffer)
 	{
@@ -59,24 +60,24 @@ int	main(int argc, char **argv)
 
 	if (parser.arguments_count == 0 || parser.printing)
 	{
-		char *stdin = read_stdin();
+		char *stdin_content = read_stdin();
 		if (!stdin)
 		{
 			ft_putstr_fd("A malloc failed\n", 2);
 			free_parser(&parser);
 			return (1);
 		}
-		t_argument argument = { .type = STRING, .name = stdin };
+		t_argument argument = { .type = STRING, .name = stdin_content };
 		char *buffer;
 		if (!run(parser, argument, &buffer))
 		{
-			free(stdin);
+			free(stdin_content);
 			free_parser(&parser);
 			return (1);
 		}
 		print(parser, argument, true, buffer);
 		free(buffer);
-		free(stdin);
+		free(stdin_content);
 	}
 	for (int i = 0; i < parser.arguments_count; i++)
 	{
