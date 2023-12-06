@@ -6,7 +6,7 @@
 /*   By: dhubleur <dhubleur@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/06 22:01:27 by dhubleur          #+#    #+#             */
-/*   Updated: 2023/12/06 22:37:04 by dhubleur         ###   ########.fr       */
+/*   Updated: 2023/12/06 23:02:53 by dhubleur         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,8 @@ static uint32_t rotateRight(uint32_t x, uint32_t n){
 
 void _sha256_init(_sha256_context_t *context)
 {
-	context->size = 0;
+	context->datalen = 0;
+	context->bitlen = 0;
 
 	context->buffer[0] = A;
 	context->buffer[1] = B;
@@ -57,80 +58,69 @@ void _sha256_init(_sha256_context_t *context)
 	context->buffer[7] = H;
 }
 
-static void sha256_do_a_round(uint32_t *buffer, uint8_t *input)
+static void sha256_do_a_round(_sha256_context_t *context, uint8_t *input)
 {
-	uint32_t tmp_a = buffer[0];
-	uint32_t tmp_b = buffer[1];
-	uint32_t tmp_c = buffer[2];
-	uint32_t tmp_d = buffer[3];
-	uint32_t tmp_e = buffer[4];
-	uint32_t tmp_f = buffer[5];
-	uint32_t tmp_g = buffer[6];
-	uint32_t tmp_h = buffer[7];
+	uint32_t a, b, c, d, e, f, g, h, i, j, t1, t2, m[64];
 
-	uint32_t m[64];
-
-	int i, j;
 	for (i = 0, j = 0; i < 16; ++i, j += 4)
 		m[i] = (input[j] << 24) | (input[j + 1] << 16) | (input[j + 2] << 8) | (input[j + 3]);
 	for ( ; i < 64; ++i)
 		m[i] = SIG1(m[i - 2]) + m[i - 7] + SIG0(m[i - 15]) + m[i - 16];
 
-	uint32_t t1, t2;
+	a = context->buffer[0];
+	b = context->buffer[1];
+	c = context->buffer[2];
+	d = context->buffer[3];
+	e = context->buffer[4];
+	f = context->buffer[5];
+	g = context->buffer[6];
+	h = context->buffer[7];
+
 	for (i = 0; i < 64; ++i) {
-		t1 = tmp_h + EP1(tmp_e) + CH(tmp_e,tmp_f,tmp_g) + k[i] + m[i];
-		t2 = EP0(tmp_a) + MAJ(tmp_a,tmp_b,tmp_c);
-		tmp_h = tmp_g;
-		tmp_g = tmp_f;
-		tmp_f = tmp_e;
-		tmp_e = tmp_d + t1;
-		tmp_d = tmp_c;
-		tmp_c = tmp_b;
-		tmp_b = tmp_a;
-		tmp_a = t1 + t2;
+		t1 = h + EP1(e) + CH(e,f,g) + k[i] + m[i];
+		t2 = EP0(a) + MAJ(a,b,c);
+		h = g;
+		g = f;
+		f = e;
+		e = d + t1;
+		d = c;
+		c = b;
+		b = a;
+		a = t1 + t2;
 	}
 
-	buffer[0] += tmp_a;
-	buffer[1] += tmp_b;
-	buffer[2] += tmp_c;
-	buffer[3] += tmp_d;
-	buffer[4] += tmp_e;
-	buffer[5] += tmp_f;
-	buffer[6] += tmp_g;
-	buffer[7] += tmp_h;
+	context->buffer[0] += a;
+	context->buffer[1] += b;
+	context->buffer[2] += c;
+	context->buffer[3] += d;
+	context->buffer[4] += e;
+	context->buffer[5] += f;
+	context->buffer[6] += g;
+	context->buffer[7] += h;
 }
 
 void _sha256_fill_and_run_if_complete(_sha256_context_t *context, uint8_t *input, uint64_t input_len)
 {
-	uint8_t prepared_input[64];
+	uint64_t i;
 
-	unsigned int offset = context->size % 64;
-    context->size += (uint64_t)input_len;
-
-    for(unsigned int i = 0; i < input_len; ++i)
-	{
-        context->input[offset++] = (uint8_t)*(input + i);
-        if(offset % 64 == 0)
-		{
-			for(unsigned int j = 0; j < 64; ++j)
-			{
-				prepared_input[j] = 0;
-				prepared_input[j] |= (uint32_t)(context->input[(j * 4) + 3]) << 24;
-				prepared_input[j] |= (uint32_t)(context->input[(j * 4) + 2]) << 16;
-				prepared_input[j] |= (uint32_t)(context->input[(j * 4) + 1]) <<  8;
-				prepared_input[j] |= (uint32_t)(context->input[(j * 4) + 0]) <<  0;
-			}
-            sha256_do_a_round(context->buffer, prepared_input);
-            offset = 0;
+	for (i = 0; i < input_len; ++i) {
+		context->input[context->datalen] = input[i];
+		context->datalen++;
+		if (context->datalen == 64) {
+			sha256_do_a_round(context, context->input);
+			context->bitlen += 512;
+			context->datalen = 0;
 		}
 	}
 }
 
 void _sha256_padd_and_finalize(_sha256_context_t *context)
 {
-	uint32_t i = context->size % 64;
+	uint32_t i;
 
-	if (context->size < 56) {
+	i = context->datalen;
+
+	if (context->datalen < 56) {
 		context->input[i++] = 0x80;
 		while (i < 56)
 			context->input[i++] = 0x00;
@@ -139,31 +129,30 @@ void _sha256_padd_and_finalize(_sha256_context_t *context)
 		context->input[i++] = 0x80;
 		while (i < 64)
 			context->input[i++] = 0x00;
-		sha256_do_a_round(context->buffer, context->input);
+		sha256_do_a_round(context, context->input);
 		ft_memset(context->input, 0, 56);
 	}
 
-	context->size *= 8;
-	context->input[63] = context->size;
-	context->input[62] = context->size >> 8;
-	context->input[61] = context->size >> 16;
-	context->input[60] = context->size >> 24;
-	context->input[59] = context->size >> 32;
-	context->input[58] = context->size >> 40;
-	context->input[57] = context->size >> 48;
-	context->input[56] = context->size >> 56;
+	context->bitlen += context->datalen * 8;
+	context->input[63] = context->bitlen;
+	context->input[62] = context->bitlen >> 8;
+	context->input[61] = context->bitlen >> 16;
+	context->input[60] = context->bitlen >> 24;
+	context->input[59] = context->bitlen >> 32;
+	context->input[58] = context->bitlen >> 40;
+	context->input[57] = context->bitlen >> 48;
+	context->input[56] = context->bitlen >> 56;
+	sha256_do_a_round(context, context->input);
 
-	sha256_do_a_round(context->buffer, context->input);
-
-	for (int i = 0; i < 4; ++i) {
-		context->digest[i] = context->buffer[0] >> (24 - i * 8);
-		context->digest[i + 4] = context->buffer[1] >> (24 - i * 8);
-		context->digest[i + 8] = context->buffer[2] >> (24 - i * 8);
-		context->digest[i + 12] = context->buffer[3] >> (24 - i * 8);
-		context->digest[i + 16] = context->buffer[4] >> (24 - i * 8);
-		context->digest[i + 20] = context->buffer[5] >> (24 - i * 8);
-		context->digest[i + 24] = context->buffer[6] >> (24 - i * 8);
-		context->digest[i + 28] = context->buffer[7] >> (24 - i * 8);
+	for (i = 0; i < 4; ++i) {
+		context->digest[i]      = (context->buffer[0] >> (24 - i * 8)) & 0x000000ff;
+		context->digest[i + 4]  = (context->buffer[1] >> (24 - i * 8)) & 0x000000ff;
+		context->digest[i + 8]  = (context->buffer[2] >> (24 - i * 8)) & 0x000000ff;
+		context->digest[i + 12] = (context->buffer[3] >> (24 - i * 8)) & 0x000000ff;
+		context->digest[i + 16] = (context->buffer[4] >> (24 - i * 8)) & 0x000000ff;
+		context->digest[i + 20] = (context->buffer[5] >> (24 - i * 8)) & 0x000000ff;
+		context->digest[i + 24] = (context->buffer[6] >> (24 - i * 8)) & 0x000000ff;
+		context->digest[i + 28] = (context->buffer[7] >> (24 - i * 8)) & 0x000000ff;
 	}
 
 }
