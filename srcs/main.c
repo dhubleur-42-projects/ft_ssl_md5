@@ -6,7 +6,7 @@
 /*   By: dhubleur <dhubleur@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/05 14:33:28 by dhubleur          #+#    #+#             */
-/*   Updated: 2023/12/06 17:10:13 by dhubleur         ###   ########.fr       */
+/*   Updated: 2023/12/06 17:11:41 by dhubleur         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,6 +62,7 @@ int	main(int argc, char **argv)
 			return (1);
 		}
 		printf("%s\n", buffer);
+		free(buffer);
 	}
 
 	free_parser(&parser);
