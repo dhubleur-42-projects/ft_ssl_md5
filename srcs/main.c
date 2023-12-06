@@ -6,7 +6,7 @@
 /*   By: dhubleur <dhubleur@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/05 14:33:28 by dhubleur          #+#    #+#             */
-/*   Updated: 2023/12/06 17:58:43 by dhubleur         ###   ########.fr       */
+/*   Updated: 2023/12/06 18:01:08 by dhubleur         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,8 +37,6 @@ char *read_stdin()
 		ft_putstr_fd("A malloc failed\n", 2);
 		return (NULL);
 	}
-	if (buffer[ft_strlen(buffer) - 1] == '\n')
-		buffer[ft_strlen(buffer) - 1] = '\0';
 	return (buffer);
 }
 
