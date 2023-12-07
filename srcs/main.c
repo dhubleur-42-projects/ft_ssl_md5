@@ -6,7 +6,7 @@
 /*   By: dhubleur <dhubleur@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/05 14:33:28 by dhubleur          #+#    #+#             */
-/*   Updated: 2023/12/07 12:19:20 by dhubleur         ###   ########.fr       */
+/*   Updated: 2023/12/07 12:34:35 by dhubleur         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,6 +79,15 @@ int	main(int argc, char **argv)
 		return (0);
 	}
 
+	if (!is_valid_command(parser.command))
+	{
+		ft_putstr_fd("ft_ssl: ", 2);
+		ft_putstr_fd(parser.command, 2);
+		ft_putstr_fd(": command not found\n", 2);
+		free_parser(&parser);
+		return (1);
+	}
+
 	if (parser.arguments_count == 0 || parser.printing)
 	{
 		char *stdin_content = read_stdin();
@@ -91,25 +100,22 @@ int	main(int argc, char **argv)
 		t_argument argument = { .type = STRING, .name = stdin_content };
 		char *buffer;
 		if (!run(parser, argument, &buffer))
-		{
 			free(stdin_content);
-			free_parser(&parser);
-			return (1);
+		else
+		{
+			print(parser, argument, true, buffer);
+			free(buffer);
+			free(stdin_content);
 		}
-		print(parser, argument, true, buffer);
-		free(buffer);
-		free(stdin_content);
 	}
 	for (int i = 0; i < parser.arguments_count; i++)
 	{
 		char *buffer;
-		if (!run(parser, parser.arguments[i], &buffer))
+		if (run(parser, parser.arguments[i], &buffer))
 		{
-			free_parser(&parser);
-			return (1);
+			print(parser, parser.arguments[i], false, buffer);
+			free(buffer);
 		}
-		print(parser, parser.arguments[i], false, buffer);
-		free(buffer);
 	}
 
 	free_parser(&parser);

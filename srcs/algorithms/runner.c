@@ -6,7 +6,7 @@
 /*   By: dhubleur <dhubleur@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/06 16:34:50 by dhubleur          #+#    #+#             */
-/*   Updated: 2023/12/07 12:20:23 by dhubleur         ###   ########.fr       */
+/*   Updated: 2023/12/07 12:33:15 by dhubleur         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,16 @@ const static t_runner runners[RUNNERS_COUNT] = {
 	(t_runner){ "md5", md5_string, md5_file, 16 },
 	(t_runner){ "sha256", sha256_string, sha256_file, 32 },
 };
+
+bool is_valid_command(char *command)
+{
+	for (int i = 0; i < RUNNERS_COUNT; i++)
+	{
+		if (ft_strcmp(runners[i].name, command) == 0)
+			return true;
+	}
+	return false;
+}
 
 bool convert_hash_to_string(uint8_t *hash, int hash_length, char **buffer)
 {
@@ -47,12 +57,7 @@ bool run(t_parser parser, t_argument argument, char **res)
 		}
 	}
 	if (runner.name == NULL)
-	{
-		ft_putstr_fd("ft_ssl: ", 2);
-		ft_putstr_fd(parser.command, 2);
-		ft_putstr_fd(": command not found\n", 2);
 		return false;
-	}
 	uint8_t hash[runner.hash_length];
 	if (argument.type == STRING)
 		runner.string_runner(argument.name, hash);

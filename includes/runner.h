@@ -6,7 +6,7 @@
 /*   By: dhubleur <dhubleur@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/06 16:34:57 by dhubleur          #+#    #+#             */
-/*   Updated: 2023/12/06 22:01:14 by dhubleur         ###   ########.fr       */
+/*   Updated: 2023/12/07 12:32:56 by dhubleur         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,5 +35,6 @@ typedef struct {
 
 bool run(t_parser parser, t_argument argument, char *res[2]);
 void print(t_parser parser, t_argument argument, bool is_stdin, char *hash);
+bool is_valid_command(char *command);
 
 #endif
