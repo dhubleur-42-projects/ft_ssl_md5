@@ -6,7 +6,7 @@
 /*   By: dhubleur <dhubleur@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/05 14:36:59 by dhubleur          #+#    #+#             */
-/*   Updated: 2023/12/06 17:07:21 by dhubleur         ###   ########.fr       */
+/*   Updated: 2023/12/07 12:36:02 by dhubleur         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ bool md5_file(int fd, uint8_t *result)
 
 	if (read_size == -1)
 	{
-		ft_putstr_fd("Error while reading file\n", 2);
+		ft_putstr_fd("ft_ssl: Impossible to read a file\n", 2);
 		return (false);
 	}
 
