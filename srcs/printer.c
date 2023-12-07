@@ -6,7 +6,7 @@
 /*   By: dhubleur <dhubleur@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/06 17:39:28 by dhubleur          #+#    #+#             */
-/*   Updated: 2023/12/07 12:21:06 by dhubleur         ###   ########.fr       */
+/*   Updated: 2023/12/07 12:23:27 by dhubleur         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,17 +25,26 @@ static void print_without_newline(char *str)
 	}
 }
 
+static void print_to_upper(char *str)
+{
+	int i = 0;
+	while (str[i])
+	{
+		ft_putchar_fd(ft_toupper(str[i]), 1);
+		i++;
+	}
+
+}
+
 static void print_info(t_parser parser, t_argument argument, bool is_stdin, char *algorithm)
 {
-	ft_putstr_fd(algorithm, 1);
+	print_to_upper(algorithm);
 	ft_putstr_fd("(", 1);
 	if (is_stdin)
 	{
 		if (parser.printing)
 		{
 			ft_putstr_fd("\"", 1);
-			if (argument.name[ft_strlen(argument.name) - 1] == '\n')
-				argument.name[ft_strlen(argument.name) - 1] = '\0';
 			print_without_newline(argument.name);
 			ft_putstr_fd("\"", 1);
 		}
