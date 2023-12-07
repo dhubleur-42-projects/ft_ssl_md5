@@ -6,11 +6,24 @@
 /*   By: dhubleur <dhubleur@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/06 17:39:28 by dhubleur          #+#    #+#             */
-/*   Updated: 2023/12/06 18:01:49 by dhubleur         ###   ########.fr       */
+/*   Updated: 2023/12/07 12:21:06 by dhubleur         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "runner.h"
+
+static void print_without_newline(char *str)
+{
+	int i = 0;
+	while (str[i])
+	{
+		if (str[i] == '\n')
+			ft_putstr_fd("\\n", 1);
+		else
+			ft_putchar_fd(str[i], 1);
+		i++;
+	}
+}
 
 static void print_info(t_parser parser, t_argument argument, bool is_stdin, char *algorithm)
 {
@@ -23,7 +36,7 @@ static void print_info(t_parser parser, t_argument argument, bool is_stdin, char
 			ft_putstr_fd("\"", 1);
 			if (argument.name[ft_strlen(argument.name) - 1] == '\n')
 				argument.name[ft_strlen(argument.name) - 1] = '\0';
-			ft_putstr_fd(argument.name, 1);
+			print_without_newline(argument.name);
 			ft_putstr_fd("\"", 1);
 		}
 		else
@@ -36,7 +49,7 @@ static void print_info(t_parser parser, t_argument argument, bool is_stdin, char
 		if (argument.type == STRING)
 		{
 			ft_putstr_fd("\"", 1);
-			ft_putstr_fd(argument.name, 1);
+			print_without_newline(argument.name);
 			ft_putstr_fd("\"", 1);
 		}
 		else
